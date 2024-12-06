@@ -7,8 +7,9 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 
-set(OpenCV_DIR D:/ThirdPackage/MinGW1120/opencv4.10/x64/mingw/lib)#库路径你自己换成你电脑上的
-
+# set(OpenCV_DIR D:/ThirdPackage/MinGW1120/opencv4.10/x64/mingw/lib)#库路径你自己换成你电脑上的
+# .dll 动态(大多情况是编译成功后所需要的)、.lib静态(编译过程中所需要的)
+set(OpenCV_DIR D:/ThirdPackage/MinGW1120/opencv4.10/x64/mingw/lib)
 find_package(OpenCV REQUIRED)
 
 include_directories(${OpenCV_INCLUDE_DIRS})
