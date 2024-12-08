@@ -205,10 +205,15 @@ void rst::rasterizer::set_projection(const Eigen::Matrix4f& p)
 
 void rst::rasterizer::clear(rst::Buffers buff)
 {
+    // 清空颜色缓冲区(frame buffer)
+    // 这部分代码将所有像素的颜色设置为黑色(0,0,0)。这就像是在画新的一帧之前，先把画布涂成黑色。
     if ((buff & rst::Buffers::Color) == rst::Buffers::Color)
     {
         std::fill(frame_buf.begin(), frame_buf.end(), Eigen::Vector3f{0, 0, 0});
     }
+
+    // 清空深度缓冲区(depth buffer)
+    // 这部分将深度缓冲区的所有值设置为正无穷。深度缓冲区用于z-buffer算法，确保3D渲染时物体的前后关系正确。初始化为正无穷是为了保证第一个渲染的像素一定会被写入。
     if ((buff & rst::Buffers::Depth) == rst::Buffers::Depth)
     {
         std::fill(depth_buf.begin(), depth_buf.end(), std::numeric_limits<float>::infinity());

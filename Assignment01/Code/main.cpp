@@ -20,19 +20,55 @@ Eigen::Matrix4f get_view_matrix(Eigen::Vector3f eye_pos)
     return view;
 }
 
+// 罗德里格斯旋转公式——任意旋转
+Eigen::Matrix4f get_rotation_matrix(float rotation_angle, Eigen::Vector3f axis)
+{
+    // 将旋转角度转换为弧度
+    float radian = rotation_angle / 180.0 * MY_PI;
+    
+    // 归一化旋转轴
+    axis.normalize();
+    
+    // 构建罗德里格斯旋转矩阵
+    Eigen::Matrix3f I = Eigen::Matrix3f::Identity();
+    Eigen::Matrix3f cross_matrix;
+    cross_matrix << 0, -axis(2), axis(1),
+                   axis(2), 0, -axis(0),
+                   -axis(1), axis(0), 0;
+    
+    // R = cos(θ)I + (1-cos(θ))nn^T + sin(θ)N
+    Eigen::Matrix3f rotation3f = cos(radian) * I +
+                              (1 - cos(radian)) * axis * axis.transpose() +
+                              sin(radian) * cross_matrix;
+    
+    // 将3x3旋转矩阵转换为4x4矩阵
+    Eigen::Matrix4f rotation4f = Eigen::Matrix4f::Identity();
+    rotation4f.block<3,3>(0,0) = rotation3f;
+    
+    return rotation4f;
+}
+
 Eigen::Matrix4f get_model_matrix(float rotation_angle)
 {
-    Eigen::Matrix4f model = Eigen::Matrix4f::Identity();
+    Eigen::Matrix4f model = Eigen::Matrix4f::Identity(); //创建一个单位矩阵，即主对角线上的元素都是1，其他位置都是0
 
     // TODO: Implement this function
     // Create the model matrix for rotating the triangle around the Z axis.
     // Then return it.
     Eigen::Matrix4f rotate;
-    float radian = rotation_angle/180.0*MY_PI;
-    rotate << cos(radian), -1*sin(radian), 0, 0,
-              sin(radian), cos(radian), 0, 0,
-              0, 0, 1, 0,
-              0, 0, 0, 1;//单纯实现了关于z轴的旋转矩阵
+
+    // 方式1：直接创建旋转矩阵
+    // float radian = rotation_angle/180.0*MY_PI;
+    // rotate << cos(radian), -1*sin(radian), 0, 0,
+    //           sin(radian), cos(radian), 0, 0,
+    //           0, 0, 1, 0,
+    //           0, 0, 0, 1;//单纯实现了关于z轴的旋转矩阵
+
+    // 方式2：使用罗德里格斯公式进行任意旋转
+    // 使用 get_rotation_matrix 函数获取绕 Z 轴的旋转矩阵
+    // Z 轴向量为 (0, 0, 1)
+    rotate = get_rotation_matrix(rotation_angle, Eigen::Vector3f(0, 0, 1));
+
     model = rotate * model; 
     return model;
 }
@@ -124,6 +160,7 @@ int main(int argc, const char** argv)
         return 0;
     }
 
+    // 检测 ESC 键的按下。在 ASCII 码中，27 就是 ESC 键的编码值。
     while (key != 27) {
         r.clear(rst::Buffers::Color | rst::Buffers::Depth);
 
@@ -133,12 +170,15 @@ int main(int argc, const char** argv)
 
         r.draw(pos_id, ind_id, rst::Primitive::Triangle);
 
+        // CV_32FC3指定图像的数据类型和通道数，32F表示使用32位浮点数，C3表示有3个通道。
+        // r.frame_buffer().data()使用光栅化器(rasterizer)的帧缓冲区数据作为图像数据源
         cv::Mat image(700, 700, CV_32FC3, r.frame_buffer().data());
+        // CV_8UC3目标图像的数据类型，8U表示使用8位无符号整数，C3表示3个通道（RGB），1.0f缩放因子，用于在转换过程中对像素值进行缩放。
         image.convertTo(image, CV_8UC3, 1.0f);
-        cv::imshow("image", image);
-        key = cv::waitKey(10);
+        cv::imshow("image", image); // 在名为"image"的窗口中显示当前帧
+        key = cv::waitKey(10); // 等待10毫秒并获取键盘输入，这里的10毫秒延迟可以控制动画的帧率（约100 FPS）。
 
-        std::cout << "frame count: " << frame_count++ << '\n';
+        std::cout << "frame count: " << frame_count++ << '\n';// 打印并递增帧计数器
 
         if (key == 'a') {
             angle += 10;
