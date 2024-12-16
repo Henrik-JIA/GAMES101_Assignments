@@ -215,12 +215,41 @@ int main(int argc, const char** argv)
 
         std::cout << "frame count: " << frame_count++ << '\n';// 打印并递增帧计数器
 
+        // 旋转三角形，绕z轴旋转
+        // 直接作用于模型本身
         if (key == 'a') {
             angle += 10;
         }
         else if (key == 'd') {
             angle -= 10;
         }
+
+        // 相机的平移变换
+        //后面的 w/s/q/e/z/c 控制的是相机(eye_pos)的移动
+        // 前后移动（控制z轴）
+        if (key == 'w') {
+            eye_pos[2] += 1;
+        }
+        else if (key == 's') {
+            eye_pos[2] -= 1;
+        }
+        // 左右移动（控制x轴）
+        else if (key == 'q') {
+            eye_pos[0] -= 1;  // 向左移动，x值减小
+        }
+        else if (key == 'e') {
+            eye_pos[0] += 1;  // 向右移动，x值增加
+        }
+        // 上下移动（控制y轴）
+        else if (key == 'z') {
+            //这里存在一个bug，当相机移动到y轴的负值时，会报错。
+            eye_pos[1] -= 1;  // 向下移动，y值减小
+            std::cout << "Camera position: (" << eye_pos[0] << ", " << eye_pos[1] << ", " << eye_pos[2] << ")" << std::endl;
+        }
+        else if (key == 'c') {
+            eye_pos[1] += 1;  // 向上移动，y值增加
+        }
+		
     }
 
     return 0;
