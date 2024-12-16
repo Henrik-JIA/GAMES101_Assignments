@@ -1,0 +1,20 @@
+[
+{
+  "directory": "D:/CG/GAMES101_Assignments/Assignment01/Code/build",
+  "command": "D:\\MinGW64\\mingw1120_64\\bin\\g++.exe  @CMakeFiles/MYCODE.dir/includes_CXX.rsp -g -std=gnu++17 -o CMakeFiles\\MYCODE.dir\\Triangle.cpp.obj -c D:\\CG\\GAMES101_Assignments\\Assignment01\\Code\\Triangle.cpp",
+  "file": "D:/CG/GAMES101_Assignments/Assignment01/Code/Triangle.cpp",
+  "output": "CMakeFiles/MYCODE.dir/Triangle.cpp.obj"
+},
+{
+  "directory": "D:/CG/GAMES101_Assignments/Assignment01/Code/build",
+  "command": "D:\\MinGW64\\mingw1120_64\\bin\\g++.exe  @CMakeFiles/MYCODE.dir/includes_CXX.rsp -g -std=gnu++17 -o CMakeFiles\\MYCODE.dir\\main.cpp.obj -c D:\\CG\\GAMES101_Assignments\\Assignment01\\Code\\main.cpp",
+  "file": "D:/CG/GAMES101_Assignments/Assignment01/Code/main.cpp",
+  "output": "CMakeFiles/MYCODE.dir/main.cpp.obj"
+},
+{
+  "directory": "D:/CG/GAMES101_Assignments/Assignment01/Code/build",
+  "command": "D:\\MinGW64\\mingw1120_64\\bin\\g++.exe  @CMakeFiles/MYCODE.dir/includes_CXX.rsp -g -std=gnu++17 -o CMakeFiles\\MYCODE.dir\\rasterizer.cpp.obj -c D:\\CG\\GAMES101_Assignments\\Assignment01\\Code\\rasterizer.cpp",
+  "file": "D:/CG/GAMES101_Assignments/Assignment01/Code/rasterizer.cpp",
+  "output": "CMakeFiles/MYCODE.dir/rasterizer.cpp.obj"
+}
+]

@@ -7,20 +7,25 @@
 
 constexpr double MY_PI = 3.1415926;
 
+// 获取视图矩阵，用于设置视点位置（传入观察点位置）
 Eigen::Matrix4f get_view_matrix(Eigen::Vector3f eye_pos)
 {
     Eigen::Matrix4f view = Eigen::Matrix4f::Identity();
 
     Eigen::Matrix4f translate;
-    translate << 1, 0, 0, -eye_pos[0], 0, 1, 0, -eye_pos[1], 0, 0, 1,
-        -eye_pos[2], 0, 0, 0, 1;
+    // 将观察点位置移动到原点
+    // 由于观察点位置在(0,0,5)，所以需要将(0,0,5)平移到原点(0,0,0)
+    translate << 1, 0, 0, -eye_pos[0], 
+                 0, 1, 0, -eye_pos[1], 
+                 0, 0, 1, -eye_pos[2], 
+                 0, 0, 0, 1;
 
     view = translate * view;
 
     return view;
 }
 
-// 罗德里格斯旋转公式——任意旋转
+// 罗德里格斯旋转公式——任意旋转（传入旋转角度和旋转轴）
 Eigen::Matrix4f get_rotation_matrix(float rotation_angle, Eigen::Vector3f axis)
 {
     // 将旋转角度转换为弧度
@@ -48,6 +53,8 @@ Eigen::Matrix4f get_rotation_matrix(float rotation_angle, Eigen::Vector3f axis)
     return rotation4f;
 }
 
+// 获取模型矩阵，用于旋转三角形（传入旋转角度）
+// 模型矩阵是直接对模型进行操作的。
 Eigen::Matrix4f get_model_matrix(float rotation_angle)
 {
     Eigen::Matrix4f model = Eigen::Matrix4f::Identity(); //创建一个单位矩阵，即主对角线上的元素都是1，其他位置都是0
@@ -57,7 +64,7 @@ Eigen::Matrix4f get_model_matrix(float rotation_angle)
     // Then return it.
     Eigen::Matrix4f rotate;
 
-    // 方式1：直接创建旋转矩阵
+    // 方式1：直接创建旋转矩阵，单纯实现了关于z轴的旋转矩阵
     // float radian = rotation_angle/180.0*MY_PI;
     // rotate << cos(radian), -1*sin(radian), 0, 0,
     //           sin(radian), cos(radian), 0, 0,
@@ -73,42 +80,55 @@ Eigen::Matrix4f get_model_matrix(float rotation_angle)
     return model;
 }
 
-
-/*
- * eye_fov 视野的大小
- * aspect_ratio  长宽比？ 猜测是视野的长宽比率
- * zNear 最近处的坐标
- * zFar 最远处的坐标
+// 获取投影矩阵，用于设置投影（传入视野大小、长宽比、最近处坐标、最远处坐标）
+/* 
+ * eye_fov 视野的大小，单位为度
+ * aspect_ratio  长宽比
+ * zNear 最近处的坐标，这个面离观察点的距离，相机看向-z轴，那么这个面离观察点的距离就是0.1，坐标就是(0,0,-0.1)
+ * zFar 最远处的坐标，这个面离观察点的距离，相机看向-z轴，那么这个面离观察点的距离就是50，坐标就是(0,0,-50)
  */
 Eigen::Matrix4f get_projection_matrix(float eye_fov, float aspect_ratio,
                                       float zNear, float zFar)
 {
-    // Students will implement this function
-    // TODO: Implement this function
-    // Create the projection matrix for the given parameters.
-    // Then return it.
+    // 注意：这里zNear和zFar是相机看向-z轴的，zNear和zFar传入的是距离值，如果是坐标就都是负数。
+
+    // 透视投影矩阵
     Eigen::Matrix4f projection = Eigen::Matrix4f::Identity();
+
+    // 1.将透视投影转换为正交投影的矩阵，压缩矩阵，使得视锥体变为长方体
     Eigen::Matrix4f P2O = Eigen::Matrix4f::Identity();//将透视投影转换为正交投影的矩阵
     P2O<<zNear, 0, 0, 0,
          0, zNear, 0, 0,
          0, 0, zNear+zFar,(-1)*zFar*zNear,
          0, 0, 1, 0;// 进行透视投影转化为正交投影的矩阵
-    float halfEyeAngelRadian = eye_fov/2.0/180.0*MY_PI;
+
+    // 2.从视场角和宽高比计算近平面参数，计算正交投影的参数
+    float halfEyeAngelRadian = eye_fov/2.0/180.0*MY_PI; // 将视野大小转换为弧度
+    // top与 bottom 是对称的，所以计算一个即可
     float t = zNear*std::tan(halfEyeAngelRadian);//top y轴的最高点
+    float b=(-1)*t;//bottom y轴的最大值
+    // right与 left 是对称的，所以计算一个即可
     float r=t*aspect_ratio;//right x轴的最大值
     float l=(-1)*r;//left x轴最小值
-    float b=(-1)*t;//bottom y轴的最大值
-    Eigen::Matrix4f ortho1=Eigen::Matrix4f::Identity();
-    ortho1<<2/(r-l),0,0,0,
-        0,2/(t-b),0,0,
-        0,0,2/(zNear-zFar),0,
-        0,0,0,1;//进行一定的缩放使之成为一个标准的长度为2的正方体
-    Eigen::Matrix4f ortho2 = Eigen::Matrix4f::Identity();
-    ortho2<<1,0,0,(-1)*(r+l)/2,
-        0,1,0,(-1)*(t+b)/2,
-        0,0,1,(-1)*(zNear+zFar)/2,
-        0,0,0,1;// 把一个长方体的中心移动到原点
-    Eigen::Matrix4f Matrix_ortho = ortho1 * ortho2;
+
+    // 3.正交投影矩阵
+    // 将正方体移动到原点
+    Eigen::Matrix4f ortho1 = Eigen::Matrix4f::Identity();
+    ortho1<<1,0,0,(-1)*(r+l)/2,
+            0,1,0,(-1)*(t+b)/2,
+            0,0,1,(-1)*(zNear+zFar)/2,
+            0,0,0,1;// 把一个长方体的中心移动到原点
+    // 进行一定的缩放使之成为一个标准的长度为2的正方体
+    Eigen::Matrix4f ortho2=Eigen::Matrix4f::Identity();
+    ortho2<<2/(r-l),0,0,0,
+            0,2/(t-b),0,0,
+            0,0,2/(zNear-zFar),0,
+            0,0,0,1;//进行一定的缩放使之成为一个标准的长度为2的正方体
+    // 变换步骤：先将中心平移到原点，然后进行缩放（长/宽/高缩放到2）
+    Eigen::Matrix4f Matrix_ortho = ortho2 * ortho1;
+
+    // 4.先将视锥体"压缩"成长方体，然后进行正交投影
+    // 将透视投影转换为正交投影的矩阵与正交投影的矩阵相乘，得到投影矩阵
     projection = Matrix_ortho * P2O;
     return projection;
 }
@@ -130,20 +150,29 @@ int main(int argc, const char** argv)
             return 0;
     }
 
+    // 程序入口
+    // 创建光栅化器对象，指定窗口的宽度和高度
     rst::rasterizer r(700, 700);
 
+    // 设置视点位置
     Eigen::Vector3f eye_pos = {0, 0, 5};
 
+    // 设置三角形的顶点位置
     std::vector<Eigen::Vector3f> pos{{2, 0, -2}, {0, 2, -2}, {-2, 0, -2}};
 
-    std::vector<Eigen::Vector3i> ind{{0, 1, 2}};
+    // 对顶点进行分组，每三个顶点为一个三角形，ind中的每个元素对应一个三角形。
+    std::vector<Eigen::Vector3i> ind{{0, 1, 2},};
 
+    // 加载顶点位置和索引
     auto pos_id = r.load_positions(pos);
     auto ind_id = r.load_indices(ind);
 
+    // 设置键盘输入
     int key = 0;
+    // 设置帧计数器
     int frame_count = 0;
 
+    // 如果命令行模式，则直接绘制三角形并保存图像
     if (command_line) {
         r.clear(rst::Buffers::Color | rst::Buffers::Depth);
 
@@ -162,12 +191,18 @@ int main(int argc, const char** argv)
 
     // 检测 ESC 键的按下。在 ASCII 码中，27 就是 ESC 键的编码值。
     while (key != 27) {
+        // 清除上一帧的颜色和深度缓冲区
         r.clear(rst::Buffers::Color | rst::Buffers::Depth);
 
+        // mvp矩阵
+        // 设置模型矩阵
         r.set_model(get_model_matrix(angle));
+        // 设置视图矩阵
         r.set_view(get_view_matrix(eye_pos));
+        // 设置投影矩阵，这里相机是看向-z轴的，所以近平面离观察点的距离是0.1，坐标就是(0,0,-0.1)，远平面离观察点的距离是50，坐标就是(0,0,-50)
         r.set_projection(get_projection_matrix(45, 1, 0.1, 50));
 
+        // 绘制三角形，pos_id是顶点位置的索引，ind_id是三角形的索引，rst::Primitive::Triangle是三角形的类型
         r.draw(pos_id, ind_id, rst::Primitive::Triangle);
 
         // CV_32FC3指定图像的数据类型和通道数，32F表示使用32位浮点数，C3表示有3个通道。
