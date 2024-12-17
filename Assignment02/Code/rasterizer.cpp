@@ -55,8 +55,11 @@ static std::tuple<float, float, float> computeBarycentric2D(float x, float y, co
 
 void rst::rasterizer::draw(pos_buf_id pos_buffer, ind_buf_id ind_buffer, col_buf_id col_buffer, Primitive type)
 {
+    // 获取顶点坐标
     auto& buf = pos_buf[pos_buffer.pos_id];
+    // 获取三角形顶点索引
     auto& ind = ind_buf[ind_buffer.ind_id];
+    // 获取三角形顶点颜色
     auto& col = col_buf[col_buffer.col_id];
 
     float f1 = (50 - 0.1) / 2.0;
@@ -137,11 +140,17 @@ void rst::rasterizer::clear(rst::Buffers buff)
 {
     if ((buff & rst::Buffers::Color) == rst::Buffers::Color)
     {
+        // 清除帧缓冲区
         std::fill(frame_buf.begin(), frame_buf.end(), Eigen::Vector3f{0, 0, 0});
+        // 清除SSAA帧缓冲区
+        std::fill(frame_buf_ssaa.begin(), frame_buf_ssaa.end(), Eigen::Vector3f{0, 0, 0});
     }
     if ((buff & rst::Buffers::Depth) == rst::Buffers::Depth)
     {
+        // 清除深度缓冲区
         std::fill(depth_buf.begin(), depth_buf.end(), std::numeric_limits<float>::infinity());
+        // 清除SSAA深度缓冲区
+        std::fill(depth_buf_ssaa.begin(), depth_buf_ssaa.end(), std::numeric_limits<float>::infinity());
     }
 }
 
@@ -149,6 +158,10 @@ rst::rasterizer::rasterizer(int w, int h) : width(w), height(h)
 {
     frame_buf.resize(w * h);
     depth_buf.resize(w * h);
+
+    // SSAA超采样，每个像素点划分成4个子像素区
+    frame_buf_ssaa.resize(w * h * 4);
+    depth_buf_ssaa.resize(w * h * 4);
 }
 
 int rst::rasterizer::get_index(int x, int y)
