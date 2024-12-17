@@ -55,7 +55,7 @@ Eigen::Matrix4f get_rotation_matrix(float rotation_angle, Eigen::Vector3f axis)
 
 // 获取模型矩阵，用于旋转三角形（传入旋转角度）
 // 模型矩阵是直接对模型进行操作的。
-Eigen::Matrix4f get_model_matrix(float rotation_angle)
+Eigen::Matrix4f get_model_matrix(float rotation_angle, const Eigen::Vector3f& translation = Eigen::Vector3f(0, 0, 0))
 {
     Eigen::Matrix4f model = Eigen::Matrix4f::Identity(); //创建一个单位矩阵，即主对角线上的元素都是1，其他位置都是0
 
@@ -64,6 +64,7 @@ Eigen::Matrix4f get_model_matrix(float rotation_angle)
     // Then return it.
     Eigen::Matrix4f rotate;
 
+    // 1.旋转矩阵
     // 方式1：直接创建旋转矩阵，单纯实现了关于z轴的旋转矩阵
     // float radian = rotation_angle/180.0*MY_PI;
     // rotate << cos(radian), -1*sin(radian), 0, 0,
@@ -76,7 +77,15 @@ Eigen::Matrix4f get_model_matrix(float rotation_angle)
     // Z 轴向量为 (0, 0, 1)
     rotate = get_rotation_matrix(rotation_angle, Eigen::Vector3f(0, 0, 1));
 
-    model = rotate * model; 
+    // 2.平移矩阵
+    Eigen::Matrix4f translate = Eigen::Matrix4f::Identity();
+    translate << 1, 0, 0, translation[0],
+                 0, 1, 0, translation[1],
+                 0, 0, 1, translation[2],
+                 0, 0, 0, 1;
+
+    // 3.模型矩阵
+    model = translate * rotate * model; 
     return model;
 }
 
@@ -137,6 +146,7 @@ Eigen::Matrix4f get_projection_matrix(float eye_fov, float aspect_ratio,
 int main(int argc, const char** argv)
 {
     float angle = 0;
+    Eigen::Vector3f translation = Eigen::Vector3f(0, 0, 0);
     bool command_line = false;
     std::string filename = "output.png";
 
@@ -195,8 +205,8 @@ int main(int argc, const char** argv)
         r.clear(rst::Buffers::Color | rst::Buffers::Depth);
 
         // mvp矩阵
-        // 设置模型矩阵
-        r.set_model(get_model_matrix(angle));
+        // 设置模型矩阵，添加新的成员变量用于控制模型的平移
+        r.set_model(get_model_matrix(angle, translation));
         // 设置视图矩阵
         r.set_view(get_view_matrix(eye_pos));
         // 设置投影矩阵，这里相机是看向-z轴的，所以近平面离观察点的距离是0.1，坐标就是(0,0,-0.1)，远平面离观察点的距离是50，坐标就是(0,0,-50)
@@ -215,7 +225,7 @@ int main(int argc, const char** argv)
 
         std::cout << "frame count: " << frame_count++ << '\n';// 打印并递增帧计数器
 
-        // 旋转三角形，绕z轴旋转
+        // 1.旋转三角形，绕z轴旋转
         // 直接作用于模型本身
         if (key == 'a') {
             angle += 10;
@@ -224,31 +234,57 @@ int main(int argc, const char** argv)
             angle -= 10;
         }
 
-        // 相机的平移变换
-        //后面的 w/s/q/e/z/c 控制的是相机(eye_pos)的移动
+        // 2.模型的平移变换，添加模型的平移控制
+        // 使用大写按键控制模型平移，以区分相机移动
         // 前后移动（控制z轴）
+        // 注意：相机是看向-z轴的，所以模型z轴加1，相机就向z轴正方向移动1。所以如果要模型向前移动，则模型z轴减1。
         if (key == 'w') {
-            eye_pos[2] += 1;
+            translation[2] -= 1; 
         }
         else if (key == 's') {
-            eye_pos[2] -= 1;
+            translation[2] += 1;  
         }
         // 左右移动（控制x轴）
         else if (key == 'q') {
-            eye_pos[0] -= 1;  // 向左移动，x值减小
+            translation[0] -= 1;  
         }
         else if (key == 'e') {
-            eye_pos[0] += 1;  // 向右移动，x值增加
+            translation[0] += 1; 
         }
         // 上下移动（控制y轴）
         else if (key == 'z') {
             //这里存在一个bug，当相机移动到y轴的负值时，会报错。
-            eye_pos[1] -= 1;  // 向下移动，y值减小
-            std::cout << "Camera position: (" << eye_pos[0] << ", " << eye_pos[1] << ", " << eye_pos[2] << ")" << std::endl;
+            translation[1] -= 1;
         }
         else if (key == 'c') {
-            eye_pos[1] += 1;  // 向上移动，y值增加
+            translation[1] += 1;
         }
+
+        // // 3.相机的平移变换
+        // //后面的 w/s/q/e/z/c 控制的是相机(eye_pos)的移动
+        // // 前后移动（控制z轴）
+        // if (key == 'w') {
+        //     eye_pos[2] += 1;
+        // }
+        // else if (key == 's') {
+        //     eye_pos[2] -= 1;
+        // }
+        // // 左右移动（控制x轴）
+        // else if (key == 'q') {
+        //     eye_pos[0] -= 1;  // 向左移动，x值减小
+        // }
+        // else if (key == 'e') {
+        //     eye_pos[0] += 1;  // 向右移动，x值增加
+        // }
+        // // 上下移动（控制y轴）
+        // else if (key == 'z') {
+        //     //这里存在一个bug，当相机移动到y轴的负值时，会报错。
+        //     eye_pos[1] -= 1;  // 向下移动，y值减小
+        //     std::cout << "Camera position: (" << eye_pos[0] << ", " << eye_pos[1] << ", " << eye_pos[2] << ")" << std::endl;
+        // }
+        // else if (key == 'c') {
+        //     eye_pos[1] += 1;  // 向上移动，y值增加
+        // }
 		
     }
 
