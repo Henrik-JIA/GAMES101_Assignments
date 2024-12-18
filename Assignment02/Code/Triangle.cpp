@@ -21,12 +21,17 @@ Triangle::Triangle() {
     tex_coords[2] << 0.0, 0.0;
 }
 
+// 设置三角形顶点坐标
 void Triangle::setVertex(int ind, Vector3f ver){
     v[ind] = ver;
 }
+
+// 设置三角形顶点法向量
 void Triangle::setNormal(int ind, Vector3f n){
     normal[ind] = n;
 }
+
+// 设置三角形顶点颜色
 void Triangle::setColor(int ind, float r, float g, float b) {
     if((r<0.0) || (r>255.) ||
        (g<0.0) || (g>255.) ||
@@ -35,7 +40,7 @@ void Triangle::setColor(int ind, float r, float g, float b) {
         fflush(stderr);
         exit(-1);
     }
-
+    // 将颜色值归一化到[0,1]
     color[ind] = Vector3f((float)r/255.,(float)g/255.,(float)b/255.);
     return;
 }
