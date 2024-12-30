@@ -124,6 +124,8 @@ int main(int argc, const char** argv)
 
     // 创建光栅化器，700x700的图像
     rst::rasterizer r(700, 700);
+    // 设置是否开启SSAA
+    r.set_ssaa(true);
 
     // 相机位置
     Eigen::Vector3f eye_pos = {0,0,5};
@@ -151,10 +153,11 @@ int main(int argc, const char** argv)
             };
 
     // 对顶点坐标进行分组，每三个顶点组成一个三角形
+    // 这里有两个三角形，每个三角形有三个顶点
     std::vector<Eigen::Vector3i> ind
             {
-                    {0, 1, 2},
-                    {3, 4, 5}
+                    {0, 1, 2}, // 三角形1，这里对应pos[0],pos[1],pos[2]
+                    {3, 4, 5} // 三角形2，这里对应pos[3],pos[4],pos[5]
             };
 
     // 加载顶点坐标到光栅化器
@@ -171,13 +174,22 @@ int main(int argc, const char** argv)
     // 如果命令行模式，则直接绘制三角形
     if (command_line)
     {
+        // 清除帧缓冲区和深度缓冲区
+        // 因为我们要绘制新的一帧，不能让上一帧的图像干扰到新的一帧的绘制
         r.clear(rst::Buffers::Color | rst::Buffers::Depth);
 
+        // 设置模型矩阵
         r.set_model(get_model_matrix(angle));
+        // 设置视图矩阵
         r.set_view(get_view_matrix(eye_pos));
+        // 设置投影矩阵
         r.set_projection(get_projection_matrix(45, 1, 0.1, 50));
 
+        // 绘制三角形
+        // 传入三角形的顶点坐标、顶点索引、顶点颜色、绘制类型
         r.draw(pos_id, ind_id, col_id, rst::Primitive::Triangle);
+        
+        // 将帧缓冲区转换为图像
         cv::Mat image(700, 700, CV_32FC3, r.frame_buffer().data());
         image.convertTo(image, CV_8UC3, 1.0f);
         cv::cvtColor(image, image, cv::COLOR_RGB2BGR);
@@ -188,6 +200,7 @@ int main(int argc, const char** argv)
     }
 
     // 如果非命令行模式，则进入循环绘制三角形
+    // 这里使用while循环，直到按下ESC键（ASCII码为27），循环结束
     while(key != 27)
     {
         // 清除颜色和深度缓冲区

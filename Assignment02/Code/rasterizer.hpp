@@ -62,8 +62,14 @@ namespace rst
         ind_buf_id load_indices(const std::vector<Eigen::Vector3i>& indices);
         col_buf_id load_colors(const std::vector<Eigen::Vector3f>& colors);
 
+        // 设置是否开启SSAA
+        void set_ssaa(bool enabled){ SSAA = enabled; };
+        
+        // 设置模型矩阵
         void set_model(const Eigen::Matrix4f& m);
+        // 设置视图矩阵
         void set_view(const Eigen::Matrix4f& v);
+        // 设置投影矩阵
         void set_projection(const Eigen::Matrix4f& p);
 
         void set_pixel(const Eigen::Vector3f& point, const Eigen::Vector3f& color);
@@ -82,8 +88,13 @@ namespace rst
         // VERTEX SHADER -> MVP -> Clipping -> /.W -> VIEWPORT -> DRAWLINE/DRAWTRI -> FRAGSHADER
 
     private:
+        // 是否开启SSAA
+        bool SSAA = false;
+        // 模型矩阵
         Eigen::Matrix4f model;
+        // 视图矩阵
         Eigen::Matrix4f view;
+        // 投影矩阵
         Eigen::Matrix4f projection;
 
         std::map<int, std::vector<Eigen::Vector3f>> pos_buf;
@@ -94,9 +105,14 @@ namespace rst
         std::vector<float> depth_buf;
 
         // SSAA超采样抗锯齿
+        // 每个像素点划分成4个子像素区
+        // 每个子像素区保存一个深度值
+        // 最后取平均值
+        // 保存4个深度值
+        // 使用一维数组保存数值，后续只需计算索引就可以，下面的get_index函数就是计算索引的。
         std::vector<Eigen::Vector3f> frame_buf_ssaa;
         std::vector<float> depth_buf_ssaa;
-
+        // 获取像素点在帧缓存中的索引
         int get_index(int x, int y);
 
         int width, height;

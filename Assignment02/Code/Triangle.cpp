@@ -51,6 +51,7 @@ void Triangle::setTexCoord(int ind, float s, float t) {
 std::array<Vector4f, 3> Triangle::toVector4() const
 {
     std::array<Eigen::Vector4f, 3> res;
+    // 因为之前只存入了x,y,z值，所以这里需要将w值设置为1.0f，这样齐次坐标就表示一个点。如果w分量是0，则表示一个向量。
     std::transform(std::begin(v), std::end(v), res.begin(), [](auto& vec) { return Eigen::Vector4f(vec.x(), vec.y(), vec.z(), 1.f); });
     return res;
 }
