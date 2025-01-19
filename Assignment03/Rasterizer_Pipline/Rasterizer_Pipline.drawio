@@ -1,0 +1,315 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/24.7.17 Chrome/128.0.6613.36 Electron/32.0.1 Safari/537.36" version="24.7.17">
+  <diagram name="第 1 页" id="s_1bd77TlR2pcKn1TW20">
+    <mxGraphModel dx="1050" dy="621" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-120" value="" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="790" y="710" width="770" height="930" as="geometry" />
+        </mxCell>
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-125" value="" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="720" y="60" width="940" height="630" as="geometry" />
+        </mxCell>
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-39" value="" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="110" y="440" width="530" height="690" as="geometry" />
+        </mxCell>
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-14" value="" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="110" y="60" width="530" height="360" as="geometry" />
+        </mxCell>
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="7lfqlSoi9tvCAEJJuLmN-4" target="7lfqlSoi9tvCAEJJuLmN-6" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-4" value="&lt;p&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;std::vector&amp;lt;Triangle*&amp;gt; TriangleList;&lt;/span&gt;&lt;font face=&quot;Helvetica&quot;&gt;创建三角形列表，每个元素指向三角形对象（三角形三个顶点、每个顶点颜色、每个顶点的纹理坐标、每个顶点的法线和一个空的纹理指针）&lt;/font&gt;&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="261" y="80" width="306" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" parent="1" source="7lfqlSoi9tvCAEJJuLmN-6" target="7lfqlSoi9tvCAEJJuLmN-8" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-6" value="objl::Loader Loader;初始化加载obj模型对象" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="287" y="170" width="254" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="7lfqlSoi9tvCAEJJuLmN-8" target="7lfqlSoi9tvCAEJJuLmN-11" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-8" value="Loader.LoadFile(&quot;../models/spot/spot_triangulated_good.obj&quot;);输入模型路径进行模型加载" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="244" y="230" width="340" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-17" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" parent="1" source="7lfqlSoi9tvCAEJJuLmN-11" target="7lfqlSoi9tvCAEJJuLmN-16" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-11" value="循环模型中的每一个三角形，并添加到三角形列表中，包括设置顶点信息，设置法线信息和设置纹理坐标。" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="299" y="330" width="230" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-15" value="obj模型加载并添加三角形对象：" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="110" y="60" width="100" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-20" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="7lfqlSoi9tvCAEJJuLmN-16" target="7lfqlSoi9tvCAEJJuLmN-18" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-16" value="初始化光栅器，并设置光栅器大小。" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="354" y="460" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-22" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="7lfqlSoi9tvCAEJJuLmN-18" target="7lfqlSoi9tvCAEJJuLmN-21" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-18" value="设置光栅器中的纹理图片" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="366" y="550" width="96" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-24" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="7lfqlSoi9tvCAEJJuLmN-21" target="7lfqlSoi9tvCAEJJuLmN-23" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-21" value="选择片元着色器模型" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="346" y="620" width="136" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-26" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="7lfqlSoi9tvCAEJJuLmN-23" target="7lfqlSoi9tvCAEJJuLmN-25" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-23" value="设置光栅器中的顶点着色器，顶点着色器返回顶点坐标" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="327" y="680" width="174" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-28" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="7lfqlSoi9tvCAEJJuLmN-25" target="7lfqlSoi9tvCAEJJuLmN-27" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-25" value="设置光栅器中的片元着色器，片元着色器返回像素颜色" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="327" y="740" width="173" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-30" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="7lfqlSoi9tvCAEJJuLmN-27" target="7lfqlSoi9tvCAEJJuLmN-29" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-27" value="清除颜色和深度缓冲区" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="341" y="810" width="146" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-33" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" parent="1" source="7lfqlSoi9tvCAEJJuLmN-29" target="7lfqlSoi9tvCAEJJuLmN-32" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-29" value="设置模型矩阵、视图矩阵和投影矩阵" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="311" y="870" width="206" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-31" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" parent="1" source="7lfqlSoi9tvCAEJJuLmN-27" target="7lfqlSoi9tvCAEJJuLmN-27" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-35" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="7lfqlSoi9tvCAEJJuLmN-32" target="7lfqlSoi9tvCAEJJuLmN-34" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-123" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="7lfqlSoi9tvCAEJJuLmN-32" target="7lfqlSoi9tvCAEJJuLmN-122" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="680" y="945" />
+              <mxPoint x="680" y="32" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-32" value="绘制三角形列表中的每一个三角形元素" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="354" y="930" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-37" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="7lfqlSoi9tvCAEJJuLmN-34" target="7lfqlSoi9tvCAEJJuLmN-36" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-34" value="获取光栅化器中的颜色缓冲帧，并显示出当前帧渲染结果" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="354" y="990" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-36" value="将当前帧保存为图片" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="354" y="1080" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-40" value="初始化光栅器，加载顶点和片元着色器，设置矩阵，绘制模型：" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="110" y="440" width="170" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-43" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" parent="1" source="7lfqlSoi9tvCAEJJuLmN-41" target="7lfqlSoi9tvCAEJJuLmN-4" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-41" value="开始main函数" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="354" y="20" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-118" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" parent="1" source="7lfqlSoi9tvCAEJJuLmN-44" target="7lfqlSoi9tvCAEJJuLmN-45" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-44" value="计算MVP矩阵" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="1181" y="80" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-48" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="7lfqlSoi9tvCAEJJuLmN-45" target="7lfqlSoi9tvCAEJJuLmN-47" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-59" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="7lfqlSoi9tvCAEJJuLmN-45" target="7lfqlSoi9tvCAEJJuLmN-53" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-60" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="7lfqlSoi9tvCAEJJuLmN-45" target="7lfqlSoi9tvCAEJJuLmN-49" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-45" value="遍历三角形列表，每一次循环就处理一个三角形&lt;div&gt;for (const auto&amp;amp; t:TriangleList) { }&lt;br&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="1140" y="130" width="201" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-73" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="7lfqlSoi9tvCAEJJuLmN-46" target="7lfqlSoi9tvCAEJJuLmN-70" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-46" value="创建一个新的Triangle三角形对象newtri，将mvp矩阵计算后（在屏幕空间坐标）的顶点、法线、颜色设置到新的三角形对象中" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="1310" y="530" width="250" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-71" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="7lfqlSoi9tvCAEJJuLmN-47" target="7lfqlSoi9tvCAEJJuLmN-70" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-47" value="只进行模型矩阵和视图矩阵变换后的信息：&lt;br&gt;t 是一个指向 Triangle 对象的指针。t-&amp;gt;v 表示访问 t 所指向的 Triangle 对象的成员变量 v。取得三维空间下的坐标（还未进行投影变换，没有投影到平面），并将xyz前三个维度取出赋值到std::array&amp;lt;Eigen::Vector3f, 3&amp;gt; viewspace_pos;中。" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="740" y="230" width="309" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-61" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" parent="1" source="7lfqlSoi9tvCAEJJuLmN-49" target="7lfqlSoi9tvCAEJJuLmN-51" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-49" value="进行完整MVP变换后的信息：&lt;br&gt;将顶点坐标从模型空间转换到裁剪空间。进行完整mvp变换。" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="1136" y="230" width="209" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-65" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="7lfqlSoi9tvCAEJJuLmN-51" target="7lfqlSoi9tvCAEJJuLmN-64" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-51" value="将MVP变换后的xyzw分量，进行归一化处理，注意这里w分量并不除以w分量本身，只对xyz分量除以w，这样保留了w分量值，也就是保留了三维空间中的z值。" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="1146" y="320" width="190" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-63" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" parent="1" source="7lfqlSoi9tvCAEJJuLmN-53" target="7lfqlSoi9tvCAEJJuLmN-55" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-53" value="计算法线矩阵inv_trans是 view * model 矩阵的逆矩阵的转置。" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="1430" y="230" width="210" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-69" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="7lfqlSoi9tvCAEJJuLmN-55" target="7lfqlSoi9tvCAEJJuLmN-46" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-55" value="对法线进行变换，将法线从模型空间转换到裁剪空间，法线矩阵的w分量设置为0，因为法线是方向向量，w分量是0，如果w分量是1，表示一个点。" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="1430" y="320" width="210" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-66" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" parent="1" source="7lfqlSoi9tvCAEJJuLmN-64" target="7lfqlSoi9tvCAEJJuLmN-46" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-64" value="进行视口变换 Viewport transformation&amp;nbsp;&lt;div&gt;将裁剪空间坐标（在中心点的平面）移动到屏幕空间坐标上。&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="1136" y="430" width="210" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-75" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="7lfqlSoi9tvCAEJJuLmN-70" target="7lfqlSoi9tvCAEJJuLmN-74" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-70" value="将viewspace_pos传递给rasterize_triangle函数，进行三角形光栅化。&lt;div&gt;因为要进行光线作用，所以需要viewspace_pos原本在三维空间中的坐标。&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="1101" y="615" width="280" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-78" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" parent="1" source="7lfqlSoi9tvCAEJJuLmN-74" target="7lfqlSoi9tvCAEJJuLmN-77" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-74" value="获取mvp变换以及视口变换后的顶点坐标，并计算这些顶点的包围盒。" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="1141" y="725" width="200" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-80" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="7lfqlSoi9tvCAEJJuLmN-77" target="7lfqlSoi9tvCAEJJuLmN-79" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-77" value="遍历包围盒中的所有像素点，并以像素中心点为采样点，通过叉乘判断是否在三角形内容。" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="1141" y="810" width="199" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-83" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" parent="1" source="7lfqlSoi9tvCAEJJuLmN-79" target="7lfqlSoi9tvCAEJJuLmN-81" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-79" value="计算重心坐标" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="1181" y="890" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-86" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="7lfqlSoi9tvCAEJJuLmN-81" target="7lfqlSoi9tvCAEJJuLmN-84" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-81" value="深度缓存插值" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="1176" y="950" width="129" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-87" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="7lfqlSoi9tvCAEJJuLmN-84" target="7lfqlSoi9tvCAEJJuLmN-85" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-89" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="7lfqlSoi9tvCAEJJuLmN-84" target="7lfqlSoi9tvCAEJJuLmN-88" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-84" value="进行深度判断" style="rhombus;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="1140" y="1010" width="201" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-96" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="7lfqlSoi9tvCAEJJuLmN-85" target="7lfqlSoi9tvCAEJJuLmN-90" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-97" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="7lfqlSoi9tvCAEJJuLmN-85" target="7lfqlSoi9tvCAEJJuLmN-92" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-98" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="7lfqlSoi9tvCAEJJuLmN-85" target="7lfqlSoi9tvCAEJJuLmN-93" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-99" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="7lfqlSoi9tvCAEJJuLmN-85" target="7lfqlSoi9tvCAEJJuLmN-94" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-85" value="如果当前像素深度靠近相机" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="981" y="1020" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-117" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" parent="1" source="7lfqlSoi9tvCAEJJuLmN-88" target="7lfqlSoi9tvCAEJJuLmN-114" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-88" value="如果当前像素深度没有更靠近相机，则不进行任何更新，依然使用原来的信息。" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="1381" y="1020" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-100" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="7lfqlSoi9tvCAEJJuLmN-90" target="7lfqlSoi9tvCAEJJuLmN-95" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-90" value="进行颜色插值" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="830" y="1120" width="85.5" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-101" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="7lfqlSoi9tvCAEJJuLmN-92" target="7lfqlSoi9tvCAEJJuLmN-95" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-92" value="进行法线插值" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="930" y="1120" width="85.5" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-102" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" parent="1" source="7lfqlSoi9tvCAEJJuLmN-93" target="7lfqlSoi9tvCAEJJuLmN-95" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-93" value="进行纹理插值" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="1030" y="1120" width="85.5" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-103" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" parent="1" source="7lfqlSoi9tvCAEJJuLmN-94" target="7lfqlSoi9tvCAEJJuLmN-95" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-94" value="进行内部点三维空间插值，也就是当前着色的点在三维空间中的坐标x，y，z，而不是屏幕空间的插值" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="1130" y="1120" width="124" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-105" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="7lfqlSoi9tvCAEJJuLmN-95" target="7lfqlSoi9tvCAEJJuLmN-104" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-95" value="将插值后的颜色、法线、纹理坐标、着色点三维坐标传递给着色器" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="940" y="1240" width="190" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-107" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="7lfqlSoi9tvCAEJJuLmN-104" target="7lfqlSoi9tvCAEJJuLmN-21" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-110" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="7lfqlSoi9tvCAEJJuLmN-104" target="7lfqlSoi9tvCAEJJuLmN-109" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-112" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="7lfqlSoi9tvCAEJJuLmN-104" target="7lfqlSoi9tvCAEJJuLmN-111" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-104" value="调用着色器，计算着色点颜色，这里着色器传入的参数就是当前像素对应的信息，着色器就根据这些信息计算出着色点颜色" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="917.5" y="1330" width="235" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-115" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="7lfqlSoi9tvCAEJJuLmN-109" target="7lfqlSoi9tvCAEJJuLmN-114" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-109" value="设置当前像素点的颜色，并更新帧缓存，进行颜色设置。" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="880" y="1440" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-116" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" parent="1" source="7lfqlSoi9tvCAEJJuLmN-111" target="7lfqlSoi9tvCAEJJuLmN-114" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-111" value="更新深度缓冲区" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="1061" y="1440" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-114" value="完成三角形光栅化。" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="1170" y="1550" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-121" value="三角形光栅化：" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="790" y="710" width="105" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-124" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" parent="1" source="7lfqlSoi9tvCAEJJuLmN-122" target="7lfqlSoi9tvCAEJJuLmN-44" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-122" value="开始绘制每一个三角形" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="1151" y="15" width="179" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="7lfqlSoi9tvCAEJJuLmN-126" value="计算三角形顶点MV变换后的三维空间坐标；计算三角形顶点MVP变换后屏幕空间坐标；计算经过法线矩阵变换后三角形顶点对应的法线。" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="720" y="60" width="260" height="70" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

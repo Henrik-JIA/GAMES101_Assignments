@@ -13,6 +13,7 @@ private:
     cv::Mat spot_texture_data;  // 添加新的成员变量存储spot_texture.png纹理
 
 public:
+    // 构造函数
     Texture(const std::string& name)
     {
         image_data = cv::imread(name);

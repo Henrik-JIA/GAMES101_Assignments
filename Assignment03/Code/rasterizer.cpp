@@ -187,17 +187,19 @@ void rst::rasterizer::draw(std::vector<Triangle *> &TriangleList) {
         // viewspace_pos是一个包含三个Eigen::Vector3f的数组。
         std::array<Eigen::Vector3f, 3> viewspace_pos;
         // 将mm中的每个元素的x、y、z坐标提取出来，存储到viewspace_pos中。
+        // 这样viewspace_pos就包含了三角形的三个顶点在三维空间中的坐标。
         std::transform( mm.begin(), mm.end(), viewspace_pos.begin(), [](auto& v) { 
                 return v.template head<3>(); 
         });
 
         // 这里是将顶点坐标从模型空间转换到裁剪空间。进行完整mvp变换。
+        // 这里v[]存放的是裁剪空间下的顶点坐标。
         Eigen::Vector4f v[] = {
                 mvp * t->v[0],
                 mvp * t->v[1],
                 mvp * t->v[2]
         };
-        //Homogeneous division 齐次除法，将裁剪空间坐标转换为NDC坐标（归一化设备坐标，NDC坐标的范围通常是[-1, 1]）
+        // Homogeneous division 齐次除法，将裁剪空间坐标转换为NDC坐标（归一化设备坐标，NDC坐标的范围通常是[-1, 1]）
         // 注意：这里w分量并没有除以w分量，是保留了w分量值的，保留了三维空间中的z值。
         for (auto& vec : v) {
             vec.x() /= vec.w();
@@ -412,7 +414,6 @@ void rst::rasterizer::rasterize_triangle(const Triangle& t, const std::array<Eig
                         // 将插值后的颜色、法线、纹理坐标、着色点三维坐标传递给着色器
                         fragment_shader_payload payload(interpolated_color, interpolated_normal.normalized(),
                             							interpolated_texcoords, texture ? &*texture : nullptr); //如果纹理不是空指针，则传递纹理
-                        
                         // 将着色点三维坐标传递给着色器
                         payload.view_pos = interpolated_shadingcoords;
 

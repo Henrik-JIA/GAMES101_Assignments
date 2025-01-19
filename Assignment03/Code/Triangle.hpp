@@ -12,15 +12,22 @@ using namespace Eigen;
 class Triangle{
 
 public:
+    // 三角形的三个顶点
     Vector4f v[3]; /*the original coordinates of the triangle, v0, v1, v2 in counter clockwise order*/
     /*Per vertex values*/
+    // 每个顶点的颜色
     Vector3f color[3]; //color at each vertex;
+    // 每个顶点的纹理坐标
     Vector2f tex_coords[3]; //texture u,v
+    // 每个顶点的法线
     Vector3f normal[3]; //normal vector for each vertex
-
+    // 空的纹理指针
     Texture *tex= nullptr;
+
+    // 构造函数
     Triangle();
 
+    // 获取三角形的三个顶点
     Eigen::Vector4f a() const { return v[0]; }
     Eigen::Vector4f b() const { return v[1]; }
     Eigen::Vector4f c() const { return v[2]; }

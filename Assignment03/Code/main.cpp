@@ -432,7 +432,7 @@ Eigen::Vector3f displacement_fragment_shader(const fragment_shader_payload& payl
     return result_color * 255.f;
 }
 
-// 位移模型着色器，使用高度贴图和纹理
+// 位移模型着色器，使用高度贴图和纹理，返回颜色
 Eigen::Vector3f displacement_texture_fragment_shader(const fragment_shader_payload& payload)
 {
     // 关键部分：初始化光栅器中默认设置的是一个凹凸纹理。
@@ -585,7 +585,7 @@ int main(int argc, const char** argv) {
         }
     }
 
-    // 初始化光栅器
+    // 初始化光栅器，并设置光栅器的大小
     rst::rasterizer r(700, 700);
 
     // 纹理图片的路径，默认使用的是凹凸贴图的纹理，是用来更改法线贴图的。
@@ -655,10 +655,13 @@ int main(int argc, const char** argv) {
 
         // 绘制三角形
         r.draw(TriangleList);
+        // 获取光栅器中的颜色缓冲区
         cv::Mat image(700, 700, CV_32FC3, r.frame_buffer().data());
+        // 将颜色缓冲区转换为8位无符号整数类型
         image.convertTo(image, CV_8UC3, 1.0f);
+        // 将颜色缓冲区转换为BGR格式
         cv::cvtColor(image, image, cv::COLOR_RGB2BGR);
-
+        // 将颜色缓冲区保存为图片
         cv::imwrite(filename, image);
 
         return 0;
