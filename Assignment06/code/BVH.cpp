@@ -2,32 +2,54 @@
 #include <cassert>
 #include "BVH.hpp"
 
+// BVH.hpp中定义的一个类
+// class::class():property1(value1),property2(value2){...}
+// 构造函数
+// 参数：
+// p: 物体列表
+// maxPrimsInNode: 最大物体数量
+// splitMethod: 分割方法
+// 属性：
+// maxPrimsInNode: 最大物体数量
+// splitMethod: 分割方法
+// primitives: 物体列表
 BVHAccel::BVHAccel(std::vector<Object*> p, int maxPrimsInNode,
                    SplitMethod splitMethod)
-    : maxPrimsInNode(std::min(255, maxPrimsInNode)), splitMethod(splitMethod),
-      primitives(std::move(p))
+    : maxPrimsInNode(std::min(255, maxPrimsInNode)), 
+      splitMethod(splitMethod), 
+      primitives(std::move(p)) // 其中std::move(p)表示将p的所有权转移给primitives
 {
+    // 初始化时间
     time_t start, stop;
+    // 获取当前时间
     time(&start);
+    // 如果物体列表为空，则返回
     if (primitives.empty())
         return;
 
-    // 建立 BVH树，返回根节点
+    // 建立BVH树，返回根节点
     root = recursiveBuild(primitives);
-
-    // 用来计算建立 BVH树花费的时间
+    // 结束时间
     time(&stop);
+    // 计算建立 BVH树花费的时间
     double diff = difftime(stop, start);
+
+    // 计算建立 BVH树花费的时间
     int hrs = (int)diff / 3600;
     int mins = ((int)diff / 60) - (hrs * 60);
     int secs = (int)diff - (hrs * 3600) - (mins * 60);
 
+    // 打印建立 BVH树花费的时间
     printf(
         "\rBVH Generation complete: \nTime Taken: %i hrs, %i mins, %i secs\n\n",
         hrs, mins, secs);
 }
 
 // 递归建立 BVH树
+// 参数：
+// objects: 物体列表
+// 返回值：
+// BVHBuildNode*: BVH树的根节点
 BVHBuildNode* BVHAccel::recursiveBuild(std::vector<Object*> objects)
 {
     // 建立一个新的节点
@@ -42,21 +64,23 @@ BVHBuildNode* BVHAccel::recursiveBuild(std::vector<Object*> objects)
         node->right = nullptr;
         return node;
     }
-    else if (objects.size() == 2) {
+    else if (objects.size() == 2) { // 两个物体
         node->left = recursiveBuild(std::vector{objects[0]});
         node->right = recursiveBuild(std::vector{objects[1]});
 
         node->bounds = Union(node->left->bounds, node->right->bounds);
         return node;
     }
-    // 中间节点
-    else {
+    else { // 多个物体
         /*// Compute bounds of all primitives in BVH node
         Bounds3 bounds;
         for (int i = 0; i < objects.size(); ++i)
             bounds = Union(bounds, objects[i]->getBounds());*/
 
-        Bounds3 centroidBounds; // 质心包围盒
+        // 质心包围盒
+        // 遍历所有物体，计算它们的包围盒质心
+        // 然后构建一个包含所有质心的新包围盒
+        Bounds3 centroidBounds; 
         for (int i = 0; i < objects.size(); ++i)
             centroidBounds = Union(centroidBounds, objects[i]->getBounds().Centroid());
 
@@ -64,7 +88,7 @@ BVHBuildNode* BVHAccel::recursiveBuild(std::vector<Object*> objects)
         // 就需要优先划分
         // 注意：这里的划分是基于对物体的划分，而不是对空间的划分
         int dim = centroidBounds.maxExtent();
-
+        // 所有物体质心坐标在该轴上的跨度
         switch (dim) {
             // X轴过长
             case 0:
@@ -109,6 +133,11 @@ BVHBuildNode* BVHAccel::recursiveBuild(std::vector<Object*> objects)
     return node;
 }
 
+// 光线在 BVH树中碰撞
+// 参数：
+// ray: 光线
+// 返回值：
+// Intersection: 碰撞信息
 Intersection BVHAccel::Intersect(const Ray& ray) const
 {
     Intersection isect;
@@ -117,31 +146,56 @@ Intersection BVHAccel::Intersect(const Ray& ray) const
     return isect;
 }
 
+// 求得碰撞信息
+// 参数：
+// node: BVH树的根节点
+// ray: 光线
+// 返回值：
+// Intersection: 碰撞信息
 Intersection BVHAccel::getIntersection(BVHBuildNode* node, const Ray& ray) const
 {
-    // TODO Traverse the BVH to find intersection
+    // TODO Traverse the BVH to find intersection 遍历BVH树以找到交点
+    // 初始化碰撞信息
     Intersection isect;
 
+    // 计算光线方向的符号：
+    // 1 表示该轴方向非负（≥0）
+    // 0 表示该轴方向负（<0）  
     std::array<int, 3> dirIsNeg{};
     dirIsNeg[0] = int(ray.direction.x >= 0);
     dirIsNeg[1] = int(ray.direction.y >= 0);
     dirIsNeg[2] = int(ray.direction.z >= 0);
 
+    // 1. 判断光线是否与包围盒相交
     // 如果光线连包围盒都没有撞击到，则一定不会与包围盒中的物体相碰撞
+    // 直接返回空的碰撞信息，其中Intersection中的成员happened默认是false
+    // 参数：
+    // ray: 光线
+    // ray.direction_inv: 光线方向的倒数
+    // dirIsNeg: 光线方向的符号
     if (!node->bounds.IntersectP(ray, ray.direction_inv, dirIsNeg))
     {
         return isect;
     }
 
-    // 光线进入过包围盒
+    // 2. 光线进入过包围盒
     // 如果该节点是叶子节点，这时检测是否与该包围盒中的物体碰撞
     if (node -> left == nullptr && node -> right == nullptr)
     {
+        // 求得碰撞信息
         isect = node->object->getIntersection(ray);
         return isect;
     }
 
     // 如果该节点是中间节点，向下递归
+    // 当访问一个中间节点时：
+    // 1. 检查光线是否与当前节点的包围盒相交
+    // 2. 如果相交：
+    //     a. 递归检查左子节点
+    //     b. 递归检查右子节点
+    //     c. 合并两个子节点的碰撞结果
+    // 3. 如果不相交：
+    //     直接返回无碰撞
     auto hit1 = getIntersection(node->left, ray);
     auto hit2 = getIntersection(node->right, ray);
 

@@ -9,6 +9,16 @@
 class Object;
 class Sphere;
 
+// 交点类
+/*
+参数：
+    happened: 碰撞是否发生
+    coords: 碰撞点在三角形内部的重心坐标
+    normal: 法线
+    distance: 距离，也就是 t
+    obj: 碰撞点所属物体
+    m: 物体的材质信息
+*/
 struct Intersection
 {
     Intersection(){

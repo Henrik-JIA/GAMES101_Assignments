@@ -7,8 +7,16 @@
 
 #include "Vector.hpp"
 
+// 材质类型
 enum MaterialType { DIFFUSE_AND_GLOSSY, REFLECTION_AND_REFRACTION, REFLECTION };
 
+// 材质类
+/*
+参数：
+    t: 材质类型
+    c: 材质颜色
+    e: 材质发射的颜色
+*/
 class Material{
 public:
     MaterialType m_type;
@@ -25,19 +33,29 @@ public:
     inline Vector3f getColorAt(double u, double v);
     inline Vector3f getEmission();
 
-
 };
 
+// 构造函数
+// 参数：
+// t: 材质类型
+// c: 材质颜色
+// e: 材质发射的颜色
 Material::Material(MaterialType t, Vector3f c, Vector3f e){
     m_type = t;
     m_color = c;
     m_emission = e;
 }
 
+// 获取材质类型
 MaterialType Material::getType(){return m_type;}
+
+// 获取材质颜色
 Vector3f Material::getColor(){return m_color;}
+
+// 获取材质发射的颜色
 Vector3f Material::getEmission() {return m_emission;}
 
+// 获取材质颜色在(u, v)处的颜色
 Vector3f Material::getColorAt(double u, double v) {
     return Vector3f();
 }

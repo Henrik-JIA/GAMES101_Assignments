@@ -52,14 +52,20 @@ bool Scene::trace(
 //
 // If the surface is duffuse/glossy we use the Phong illumation model to compute the color
 // at the intersection point.
+// 光线追踪的实现
+// 这个函数计算一个由位置和方向定义的射线在交点处的颜色，注意这个函数是一个递归的（自己调用自己）。
+// 这里Ray是光线类，&ray是光学对象，包括射线起点、方向、时间、最小和最大距离。
 Vector3f Scene::castRay(const Ray &ray, int depth) const
 {
+    // 超过递归最大深度则返回黑色
     if (depth > this -> maxDepth) {
         return Vector3f(0.0,0.0,0.0);
     }
 
-    Intersection intersection = Scene::intersect(ray); // 光线在场景中碰撞
+    // 光线先在场景中的 BVH树中碰撞
+    Intersection intersection = Scene::intersect(ray);
 
+    // 默认背景颜色，也就是光线碰撞物体的默认颜色，这个就是默认的背景颜色。
     Vector3f hitColor = this -> backgroundColor;
 
     if(intersection.happened) {
