@@ -163,9 +163,11 @@ public:
             }
 
             // 三角形的材质信息
+            // auto new_mat =
+            //     new Material(MaterialType::DIFFUSE_AND_GLOSSY, Vector3f(0.5, 0.5, 0.5), Vector3f(0, 0, 0));
             auto new_mat =
-                new Material(MaterialType::DIFFUSE_AND_GLOSSY,
-                             Vector3f(0.5, 0.5, 0.5), Vector3f(0, 0, 0));
+                new Material(MaterialType::DIFFUSE_AND_GLOSSY, Vector3f(0.5, 0.5, 0.5), Vector3f(0, 0, 0));
+            
             new_mat -> Kd = 0.6;
             new_mat -> Ks = 0.0;
             new_mat -> specularExponent = 0;

@@ -133,6 +133,25 @@ BVHBuildNode* BVHAccel::recursiveBuild(std::vector<Object*> objects)
     return node;
 }
 
+// 收集所有节点包围盒
+void BVHAccel::CollectAllBounds(BVHBuildNode* node, std::vector<Bounds3>& boundsList) const {
+    if (!node) return;
+    
+    // 添加当前节点的包围盒
+    boundsList.push_back(node->bounds);
+    
+    // 递归收集子节点
+    CollectAllBounds(node->left, boundsList);
+    CollectAllBounds(node->right, boundsList);
+}
+
+// 获取所有节点包围盒
+std::vector<Bounds3> BVHAccel::GetAllNodeBounds() const {
+    std::vector<Bounds3> boundsList;
+    CollectAllBounds(root, boundsList);
+    return boundsList;
+}
+
 // 光线在 BVH树中碰撞
 // 参数：
 // ray: 光线
@@ -141,7 +160,10 @@ BVHBuildNode* BVHAccel::recursiveBuild(std::vector<Object*> objects)
 Intersection BVHAccel::Intersect(const Ray& ray) const
 {
     Intersection isect;
+    // 如果BVH树根节点为空，则返回空的碰撞信息
     if (!root) return isect;
+    // 求得碰撞信息，这里的碰撞是与BVH树根节点中所有物体进行碰撞检测，返回Intersection isect，
+    // 如果碰撞到了，则isect.happened为true，否则为false
     isect = BVHAccel::getIntersection(root, ray);
     return isect;
 }

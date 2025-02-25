@@ -51,13 +51,19 @@ public:
     Intersection Intersect(const Ray &ray) const; // 光线在 BVH树中碰撞
     // 求得碰撞信息
     Intersection getIntersection(BVHBuildNode* node, const Ray& ray) const; // 求得碰撞信息
-
+    // 光线在 BVH树中碰撞
     bool IntersectP(const Ray &ray) const;
-
-    BVHBuildNode* root; // BVH树根节点
+    // BVH树根节点
+    BVHBuildNode* root; 
 
     // BVHAccel Private Methods 私有方法
     BVHBuildNode* recursiveBuild(std::vector<Object*>objects);
+
+    // 自己新加的：
+    // 收集所有节点包围盒
+    void CollectAllBounds(BVHBuildNode* node, std::vector<Bounds3>& boundsList) const;
+    // 获取所有节点包围盒
+    std::vector<Bounds3> GetAllNodeBounds() const;
 
     // BVHAccel Private Data 私有数据
     const int maxPrimsInNode;

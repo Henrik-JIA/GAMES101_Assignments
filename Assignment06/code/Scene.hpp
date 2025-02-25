@@ -22,7 +22,8 @@ public:
 
     double fov = 90;
 
-    Vector3f backgroundColor = Vector3f(0.235294, 0.67451, 0.843137);
+    Vector3f backgroundColor = Vector3f(0.235294, 0.67451, 0.843137); // 天空蓝色
+    // Vector3f backgroundColor = Vector3f(1, 1, 1); // 白色
 
     int maxDepth = 5;
 
@@ -36,6 +37,7 @@ public:
     [[nodiscard]] Intersection intersect(const Ray& ray) const;
 
     BVHAccel *bvh; // 场景中的 BVH树
+    BVHAccel* getBVH() const { return bvh; } // 获取 BVH树
     void buildBVH();// 场景中建立大的 BVH树
 
     // 返回像素颜色，光线追踪主要实现
@@ -52,6 +54,7 @@ public:
     std::vector<std::unique_ptr<Light> > lights;
 
     // Compute reflection direction
+    // 计算反射，I是光线方向，N是法线方向，反射方向是光线方向减去2倍的法线方向与光线方向的点积。
     Vector3f reflect(const Vector3f &I, const Vector3f &N) const
     {
         return I - 2 * dotProduct(I, N) * N;
@@ -70,6 +73,7 @@ public:
 // If the ray is outside, you need to make cosi positive cosi = -N.I
 //
 // If the ray is inside, you need to invert the refractive indices and negate the normal N
+// 计算折射，I是光线方向，N是法线方向，ior是折射率，折射方向是光线方向减去2倍的法线方向与光线方向的点积。
     Vector3f refract(const Vector3f &I, const Vector3f &N, const float &ior) const
     {
         float cosi = clamp(-1, 1, dotProduct(I, N));

@@ -68,6 +68,7 @@ Vector3f Scene::castRay(const Ray &ray, int depth) const
     // 默认背景颜色，也就是光线碰撞物体的默认颜色，这个就是默认的背景颜色。
     Vector3f hitColor = this -> backgroundColor;
 
+    // 如果光线碰撞到了物体，intersection.happened这个为true，也就是说光线与物体中间没有任何遮挡。
     if(intersection.happened) {
         // origin + t * direction
         Vector3f hitPoint = ray.origin + ray.direction * intersection.distance;
@@ -80,9 +81,11 @@ Vector3f Scene::castRay(const Ray &ray, int depth) const
         // hitObject->getSurfaceProperties(hitPoint, ray.direction, index, uv, N, st);
 
         switch (m -> getType()) {
-            case REFLECTION_AND_REFRACTION:
+            case REFLECTION_AND_REFRACTION: // 折射+反射
             {
+                // 计算反射方向
                 Vector3f reflectionDirection = normalize(reflect(ray.direction, N));
+                // 计算折射方向
                 Vector3f refractionDirection = normalize(refract(ray.direction, N, m->ior));
 
                 Vector3f reflectionRayOrig = (dotProduct(reflectionDirection, N) < 0) ?
@@ -93,16 +96,18 @@ Vector3f Scene::castRay(const Ray &ray, int depth) const
                                              hitPoint - N * EPSILON :
                                              hitPoint + N * EPSILON;
 
+                // 递归计算反射光线和折射光线的颜色
                 Vector3f reflectionColor = castRay(Ray(reflectionRayOrig, reflectionDirection), depth + 1);
                 Vector3f refractionColor = castRay(Ray(refractionRayOrig, refractionDirection), depth + 1);
 
+                // 使用了菲涅尔反射系数kr，来计算反射和折射的比例
                 float kr;
                 fresnel(ray.direction, N, m->ior, kr);
 
                 hitColor = reflectionColor * kr + refractionColor * (1 - kr);
                 break;
             }
-            case REFLECTION:
+            case REFLECTION: // 反射
             {
                 float kr;
                 fresnel(ray.direction, N, m->ior, kr);
@@ -115,14 +120,21 @@ Vector3f Scene::castRay(const Ray &ray, int depth) const
                 hitColor = castRay(Ray(reflectionRayOrig, reflectionDirection),depth + 1) * kr;
                 break;
             }
-            default:
+            default: // 漫反射+镜面反射
             {
                 // [comment]
                 // We use the Phong illumation model int the default case. The phong model
                 // is composed of a diffuse and a specular reflection component.
                 // [/comment]
+                // 漫反射，镜面反射
                 Vector3f lightAmt = 0, specularColor = 0;
 
+                // 先计算射线方向与法线点乘，获得光线方向与法线方向的夹角
+                // 当光线方向与法线方向夹角 > 90度（即光线从物体外部射入）时，点积为负
+                // 当光线方向与法线方向夹角 < 90度（即光线从物体内部射出）时，点积为正
+                // 由于计算机中浮点精度问题，会导致光线与平面交点存在上下偏移。
+                // 如果夹角小于0，则交点物体背面，因此需要将该交点向法线反方向偏移 EPSILON，这样可以避免光线与物体表面相交。
+                // 如果夹角大于0，则交点物体正面，因此需要将该交点向法线正方向偏移 EPSILON，这样可以避免光线与物体表面相交。
                 Vector3f shadowPointOrig = (dotProduct(ray.direction, N) < 0) ?
                                            hitPoint + N * EPSILON :
                                            hitPoint - N * EPSILON;
@@ -130,30 +142,56 @@ Vector3f Scene::castRay(const Ray &ray, int depth) const
                 // Loop over all lights in the scene and sum their contribution up
                 // We also apply the lambert cosine law
                 // [/comment]
+                // 遍历场景中的所有光源，并计算它们对交点的影响
                 for (uint32_t i = 0; i < get_lights().size(); ++i)
                 {
+                    // 获取光源类型
+                    // 如果光源类型为AreaLight，则需要计算光源的面积
                     auto area_ptr = dynamic_cast<AreaLight*>(this->get_lights()[i].get());
                     if (area_ptr)
                     {
                         // Do nothing for this assignment
+                        // 计算光源的面积
                     }
-                    else
+                    else // 如果光源类型为PointLight，则需要计算光源的距离
                     {
+                        // 计算光源到碰撞点的距离，为了计算漫反射光照计算公式中的r
                         Vector3f lightDir = get_lights()[i]->position - hitPoint;
                         // square of the distance between hitPoint and the light
+                        // 计算光源到碰撞点的距离的平方r^2
                         float lightDistance2 = dotProduct(lightDir, lightDir);
+                        // 计算碰撞点指向光源的方向（注意这里光源方向始终是朝外的）
                         lightDir = normalize(lightDir);
-
+                        // 计算光源方向与法线方向的夹角，用来表面接收到多少光（能量），因为光线与平面并不是垂直的接收全部光能。
+                        // 也就是漫反射光照计算公式中的max(0, n · l)部分。
                         float LdotN = std::max(0.f, dotProduct(lightDir, N));
 
+                        // 这里就是碰撞点与光源之间是否有碰撞点，那么这里的光线就是从碰撞点射向光源的光线。
+                        // 这里的BVH树碰撞检测，是与BVH树根节点中所有物体进行碰撞检测，返回Intersection shadow_res，
+                        // 如果碰撞到了，则shadow_res.happened为true，否则为false
                         // is the point in shadow, and is the nearest occluding object closer to the object than the light itself?
                         Intersection shadow_res = bvh->Intersect(Ray(shadowPointOrig, lightDir));
+                        // 如果碰撞到了，则shadow_res.happened为true，否则为false
+                        // 如果碰撞到了，则shadow_res.distance * shadow_res.distance < lightDistance2，这里就是判断光源到新碰撞点距离是否小于光源到碰撞点距离，其实就是判断障碍物是否在光源后面。
+                        // 两个同时满足才可以碰撞点在阴影中，否则碰撞点不在阴影中。
+                        // 也就是说这个碰撞点是不能直接被光源照亮的。需要间接光照。通过其他物体反射过来的光照来照亮，这里还未涉及。所以这里并不是全局光照，只是直接光照。
                         bool inShadow = shadow_res.happened && (shadow_res.distance * shadow_res.distance < lightDistance2);
+                        
+                        // 光强度随距离平方的衰减，这里由于距离太远，光照强度衰减太快，所以就不进行光照衰减。
+                        // float attenuation = 1.0f / (lightDistance2 * 0.0001);
+                        float attenuation = 1.0f;
+                        
+                        // 这里是漫反射光照计算公式：
+                        // 计算光照强度，如果碰撞点在阴影中，则光照强度为0，否则为光源强度乘以光线与法线夹角的余弦值。
+                        // 这里有多个光源，因此需要累加。
+                        lightAmt += (1 - int(inShadow)) * (get_lights()[i]->intensity * attenuation) * LdotN;
 
-                        lightAmt += (1 - int(inShadow)) * get_lights()[i]->intensity * LdotN;
+                        // 计算镜面反射方向，是光线的反方向，因为光线是从碰撞点射向光源的。
                         Vector3f reflectionDirection = reflect(-lightDir, N);
+
+                        // 计算镜面反射光照强度，这里使用的是Phong光照模型，也就是镜面反射光照强度。
                         specularColor += powf(std::max(0.f, -dotProduct(reflectionDirection, ray.direction)),
-                                              m->specularExponent) * get_lights()[i]->intensity;
+                                              m->specularExponent) * (get_lights()[i]->intensity * attenuation);
                     }
                 }
                 hitColor = lightAmt * (hitObject->evalDiffuseColor(st) * m->Kd + specularColor * m->Ks);
