@@ -588,16 +588,17 @@ int main(int argc, const char** argv) {
     // 初始化光栅器，并设置光栅器的大小
     rst::rasterizer r(700, 700);
 
+    // 设置默认纹理路径与默认着色模型
     // 纹理图片的路径，默认使用的是凹凸贴图的纹理，是用来更改法线贴图的。
     auto texture_path = "hmap.jpg";
-    // 设置纹理
+    // 设置纹理，opencv读取纹理。
     r.set_texture(Texture(obj_path + texture_path));
-
     // 设置着色器，默认使用phong着色器，如果命令行参数有2个，则使用命令行参数中对应的着色器
     // 这里设置的是光栅器中的着色器，在光栅器中，着色器是根据当前像素对应的信息计算出着色点颜色
     std::function<Eigen::Vector3f(fragment_shader_payload)> active_shader = phong_fragment_shader;
 
     // 如果命令行参数有2个，则使用命令行参数
+    // 根据命令行参数调整纹理路径与着色模型
     if (argc >= 2) {
         command_line = true;
         // 获取命令行参数，获取图片的名称
@@ -634,7 +635,7 @@ int main(int argc, const char** argv) {
     // 设置相机位置
     Eigen::Vector3f eye_pos = {0, 0, 10};
 
-    // 设置顶点着色器，将顶点着色器传给光栅器
+    // 设置顶点着色器，将顶点着色器传给光栅器，这里vertex_shader就是返回的顶点坐标，在opengl中顶点着色器会做一些MVP变换处理。
     r.set_vertex_shader(vertex_shader);
     // 设置片段着色器，将片段着色器传给光栅器
     r.set_fragment_shader(active_shader);
@@ -646,6 +647,8 @@ int main(int argc, const char** argv) {
     if (command_line) {
         // 清除颜色和深度缓冲区
         r.clear(rst::Buffers::Color | rst::Buffers::Depth);
+
+        // 设置MVP矩阵
         // 设置模型矩阵
         r.set_model(get_model_matrix(angle));
         // 设置视图矩阵
@@ -653,7 +656,7 @@ int main(int argc, const char** argv) {
         // 设置投影矩阵
         r.set_projection(get_projection_matrix(45.0, 1, 0.1, 50));
 
-        // 绘制三角形
+        // 绘制三角形，将三角形列表传进来。
         r.draw(TriangleList);
         // 获取光栅器中的颜色缓冲区
         cv::Mat image(700, 700, CV_32FC3, r.frame_buffer().data());
@@ -667,6 +670,7 @@ int main(int argc, const char** argv) {
         return 0;
     }
 
+    // cpu进行实时渲染（比较卡）
     while(key != 27) {
         r.clear(rst::Buffers::Color | rst::Buffers::Depth);
 
@@ -687,9 +691,9 @@ int main(int argc, const char** argv) {
         std::cout << "frame count: " << frame_count++ << '\n';
         
         if (key == 'a' ) {
-            angle -= 0.1;
+            angle -= 15;
         } else if (key == 'd') {
-            angle += 0.1;
+            angle += 15;
         }
 
     }

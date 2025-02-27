@@ -1,6 +1,6 @@
 {
     "cmake.debugConfig": {
-        "args": ["output.png", "displacement_texture"] // 传递给main的参数
+        "args": ["output.png", "phong"] // 传递给main的参数
     },
     "files.associations": {
         "string": "cpp",
@@ -68,6 +68,7 @@
         "thread": "cpp",
         "cinttypes": "cpp",
         "typeinfo": "cpp",
-        "valarray": "cpp"
+        "valarray": "cpp",
+        "eigen": "cpp"
     }
 }

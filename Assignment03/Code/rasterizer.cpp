@@ -164,7 +164,7 @@ void rst::rasterizer::draw(std::vector<Triangle *> &TriangleList) {
     float f1 = (50 - 0.1) / 2.0;
     float f2 = (-50 + -0.1) / 2.0;
 
-    // 计算mvp矩阵
+    // 构建mvp矩阵
     Eigen::Matrix4f mvp = projection * view * model;
     // 遍历三角形列表，每一次循环就处理一个三角形
     for (const auto& t:TriangleList) {
@@ -176,22 +176,24 @@ void rst::rasterizer::draw(std::vector<Triangle *> &TriangleList) {
         // 这里t表示旧三角形，就是原来三维空间中的三角形。
         Triangle newtri = *t;
 
-        // t 是一个指向 Triangle 对象的指针。t->v 表示访问 t 所指向的 Triangle 对象的成员变量 v。
+        // 计算顶点在三维空间下的坐标，并没有投影。
+        // t 是一个指向 Triangle 对象的指针。t->v 表示访问 t 所指向的 Triangle 对象的成员变量 v，也就是顶点。
         // 取得三维空间下的坐标（还未进行投影变换，没有投影到平面）
         std::array<Eigen::Vector4f, 3> mm {
                 (view * model * t->v[0]),
                 (view * model * t->v[1]),
                 (view * model * t->v[2])
         };
-
         // viewspace_pos是一个包含三个Eigen::Vector3f的数组。
+        // 这个就是视角坐标系下的坐标。
         std::array<Eigen::Vector3f, 3> viewspace_pos;
-        // 将mm中的每个元素的x、y、z坐标提取出来，存储到viewspace_pos中。
+        // 将mm中的每个元素的x、y、z坐标提取出来，复制到viewspace_pos中。
         // 这样viewspace_pos就包含了三角形的三个顶点在三维空间中的坐标。
         std::transform( mm.begin(), mm.end(), viewspace_pos.begin(), [](auto& v) { 
                 return v.template head<3>(); 
         });
 
+        // MVP变换
         // 这里是将顶点坐标从模型空间转换到裁剪空间。进行完整mvp变换。
         // 这里v[]存放的是裁剪空间下的顶点坐标。
         Eigen::Vector4f v[] = {
@@ -208,10 +210,11 @@ void rst::rasterizer::draw(std::vector<Triangle *> &TriangleList) {
         }
 
         // 计算法线矩阵
-        // inv_trans是 view * model 矩阵的逆矩阵的转置。
+        // inv_trans是 (view * model) 矩阵的逆矩阵的转置。inverse()是取逆，transpose()是转至。
         // 相关说明法线矩阵为什么是view * model的逆矩阵的转置：https://blog.csdn.net/danshiming/article/details/132525514
         Eigen::Matrix4f inv_trans = (view * model).inverse().transpose();
-        // 对法线进行变换，将法线从模型空间转换到裁剪空间，法线矩阵的w分量设置为0，因为法线是方向向量，w分量是0，如果w分量是1，表示一个点。
+        // 对法线进行变换，将法线从模型空间转换到视图空间，光照计算通常在视图空间进行，因此法线不需要投影变换。
+        // 法线矩阵的w分量设置为0，因为法线是方向向量，w分量是0，如果w分量是1，表示一个点。
         Eigen::Vector4f n[] = {
                 inv_trans * to_vec4(t->normal[0], 0.0f),
                 inv_trans * to_vec4(t->normal[1], 0.0f),
@@ -290,6 +293,7 @@ interpolate(float alpha, float beta, float gamma, const Eigen::Vector2f& vert1, 
 }
 
 //Screen space rasterization
+// 三角形光栅化
 void rst::rasterizer::rasterize_triangle(const Triangle& t, const std::array<Eigen::Vector3f, 3>& view_pos) {
     // TODO: From your HW3, get the triangle rasterization code.
     // TODO: Inside your rasterization loop:
@@ -377,6 +381,7 @@ void rst::rasterizer::rasterize_triangle(const Triangle& t, const std::array<Eig
             }
             else {
                 // 以像素中心点作为采样点
+                // 像素中心点在三角形内
                 if (insideTriangle((float) x+0.5, (float) y+0.5, t.v)) {
                     // 计算重心坐标
                     auto abg = computeBarycentric2D((float) x+0.5, (float) y+0.5, t.v);
@@ -386,8 +391,9 @@ void rst::rasterizer::rasterize_triangle(const Triangle& t, const std::array<Eig
 
                     // z-buffer插值
                     float w_reciprocal = 1.0/(alpha / v[0].w() + beta / v[1].w() + gamma / v[2].w());
-                    float z_interpolated = 
-							alpha * v[0].z() / v[0].w() + beta * v[1].z() / v[1].w() + gamma * v[2].z() / v[2].w();
+                    float z_interpolated = alpha * (v[0].z() / v[0].w()) 
+                                         + beta * (v[1].z() / v[1].w()) 
+                                         + gamma * (v[2].z() / v[2].w());
                     z_interpolated *= w_reciprocal;
 
                     // 进行深度判断
@@ -457,7 +463,7 @@ void rst::rasterizer::set_projection(const Eigen::Matrix4f& p) {
 void rst::rasterizer::clear(rst::Buffers buff) {
     if ((buff & rst::Buffers::Color) == rst::Buffers::Color) {
         std::fill(frame_buf.begin(), frame_buf.end(), Eigen::Vector3f{0, 0, 0});
-        // 存储小像素的颜色信息
+        // 存储小像素的颜色信息（超采样的小像素）
         for(int i=0; i<frame_buf_2xSSAA.size(); i++) {
             frame_buf_2xSSAA[i].resize(4);
             std::fill(frame_buf_2xSSAA[i].begin(), frame_buf_2xSSAA[i].end(), Eigen::Vector3f{0, 0, 0});
@@ -465,7 +471,7 @@ void rst::rasterizer::clear(rst::Buffers buff) {
     }
     if ((buff & rst::Buffers::Depth) == rst::Buffers::Depth) {
         std::fill(depth_buf.begin(), depth_buf.end(), std::numeric_limits<float>::infinity());
-        // 存储小像素的深度信息
+        // 存储小像素的深度信息（超采样的小像素）
         for(int i=0; i<depth_buf_2xSSAA.size(); i++) {
             depth_buf_2xSSAA[i].resize(4);
             std::fill(depth_buf_2xSSAA[i].begin(), depth_buf_2xSSAA[i].end(), std::numeric_limits<float>::infinity());
